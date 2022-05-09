@@ -1,0 +1,46 @@
+name: Test Ubuntu
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.editorconfig'
+    branches:
+      - main
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.editorconfig'
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    name: "${{ matrix.os }} ${{ matrix.node }}"
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        node:
+          - 16.x
+          - 17.x
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run build
+        run: npm run build
+      - name: Run tests
+        run: npm run test
