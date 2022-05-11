@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es6",
     "strict": true,
@@ -9,4 +10,3 @@
   },
   "include": ["src/**/*"]
 }
-
