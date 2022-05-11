@@ -23,7 +23,7 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
   queryName: string
 ): any {
   const queryNameClass =
-    queryName.substr(0, 1).toUpperCase() + queryName.substr(1);
+    queryName.substring(0, 1).toUpperCase() + queryName.substring(1);
 
   @InputType(`${queryNameClass}Input`)
   class BulkMutationInputClass {
