@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import {
   Args,
   Field,
@@ -13,8 +15,13 @@ import { SelectionSet as SelectionSetObject } from '@appvise/domain';
 import { Type } from '@nestjs/common';
 import { IsArray, ValidateNested } from 'class-validator';
 import { Type as TypeDecorator } from 'class-transformer';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { BulkMutationError } from './bulk-mutation';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import Upload from 'graphql-upload/Upload.js';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const GraphQLUpload = require('graphql-upload/GraphQLUpload.js');
 
 export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
   inputType: Type<TInput>,
@@ -74,7 +81,7 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
       input: BulkMutationInputClass,
       @SelectionSet() selectionSet: SelectionSetObject,
       @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
-      files?: FileUpload[]
+      files?: Upload[]
     ): Promise<BulkMutationResponse> {
       const results: BulkMutationResult[] = [];
       let errorCount = 0;
@@ -114,7 +121,7 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
       };
     }
 
-    abstract executeMutation(input: TInput, file?: FileUpload): Promise<string>;
+    abstract executeMutation(input: TInput, file?: Upload): Promise<string>;
   }
 
   return BulkMutationWithUploadsResolver;
