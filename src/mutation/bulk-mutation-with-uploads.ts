@@ -1,5 +1,3 @@
-// @ts-ignore
-
 import {
   Args,
   Field,
@@ -20,8 +18,7 @@ import { BulkMutationError } from './bulk-mutation';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Upload from 'graphql-upload/Upload.js';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const GraphQLUpload = require('graphql-upload/GraphQLUpload.js');
+import { GraphQLUploadScalar } from '../scalar';
 
 export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
   inputType: Type<TInput>,
@@ -80,7 +77,11 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
       @Args('data', { type: () => BulkMutationInputClass })
       input: BulkMutationInputClass,
       @SelectionSet() selectionSet: SelectionSetObject,
-      @Args({ name: 'files', type: () => [GraphQLUpload], nullable: true })
+      @Args({
+        name: 'files',
+        type: () => [GraphQLUploadScalar],
+        nullable: true,
+      })
       files?: Upload[]
     ): Promise<BulkMutationResponse> {
       const results: BulkMutationResult[] = [];
