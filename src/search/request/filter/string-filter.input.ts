@@ -16,5 +16,10 @@ export class StringFilterInput implements StringFilter {
   @Field(() => String, {
     nullable: true,
   })
+  iContains?: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
   excludes?: string;
 }
