@@ -1,1 +1,2 @@
-export { SelectionSet } from './selection-set-decorator';
+export * from './current-identity-decorator';
+export * from './selection-set-decorator';
