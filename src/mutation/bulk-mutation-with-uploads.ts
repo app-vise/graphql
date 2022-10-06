@@ -8,7 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { SelectionSet } from '../request';
+import { CurrentIdentity, GetCurrentIdentity, SelectionSet } from '../request';
 import { SelectionSet as SelectionSetObject } from '@appvise/domain';
 import { Type } from '@nestjs/common';
 import { IsArray, ValidateNested } from 'class-validator';
@@ -76,6 +76,7 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
     async execute(
       @Args('data', { type: () => BulkMutationInputClass })
       input: BulkMutationInputClass,
+      @GetCurrentIdentity() currentIdentity: CurrentIdentity,
       @SelectionSet() selectionSet: SelectionSetObject,
       @Args({
         name: 'files',
@@ -92,6 +93,7 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
           // Call abstract mutation in extender class
           const nodeId = await this.executeMutation(
             input.items[index],
+            currentIdentity,
             files && files[index] ? await files[index] : undefined
           );
 
@@ -122,7 +124,11 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
       };
     }
 
-    abstract executeMutation(input: TInput, file?: Upload): Promise<string>;
+    abstract executeMutation(
+      input: TInput,
+      currentIdentity: CurrentIdentity,
+      file?: Upload
+    ): Promise<string>;
   }
 
   return BulkMutationWithUploadsResolver;

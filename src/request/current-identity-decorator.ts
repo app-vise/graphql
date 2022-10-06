@@ -1,9 +1,14 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-export const CurrentIdentity = createParamDecorator(
+export const GetCurrentIdentity = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
-    return ctx.getContext().req.currentIdentity;
+    return ctx.getContext().req.currentIdentity as CurrentIdentity;
   }
 );
+
+export interface CurrentIdentity {
+  id: string;
+  [key: string]: unknown;
+}
