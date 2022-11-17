@@ -20,12 +20,25 @@ import { BulkMutationError } from './bulk-mutation';
 import Upload from 'graphql-upload/Upload.js';
 import { GraphQLUploadScalar } from '../scalar';
 
+export abstract class BulkMutationWithUploadsBaseResolver {
+  constructor(
+    protected readonly commandBus: CommandBus,
+    protected readonly queryBus: QueryBus
+  ) {}
+
+  abstract executeMutation(
+    input: any,
+    currentIdentity: CurrentIdentity,
+    file?: Upload
+  ): Promise<string>;
+}
+
 export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
   inputType: Type<TInput>,
   nodeType: new (entity: TEntity) => TNode,
   queryType: new (itemId: string, selectionSet?: SelectionSetObject) => TQuery,
   queryName: string
-): any {
+): typeof BulkMutationWithUploadsBaseResolver {
   const queryNameClass =
     queryName.substring(0, 1).toUpperCase() + queryName.substring(1);
 
@@ -66,11 +79,10 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
   }
 
   @Resolver(() => nodeType, { isAbstract: true })
-  abstract class BulkMutationWithUploadsResolver {
-    protected constructor(
-      protected readonly commandBus: CommandBus,
-      protected readonly queryBus: QueryBus
-    ) {}
+  abstract class BulkMutationWithUploadsResolver extends BulkMutationWithUploadsBaseResolver {
+    constructor(commandBus: CommandBus, queryBus: QueryBus) {
+      super(commandBus, queryBus);
+    }
 
     @Mutation(() => BulkMutationResponse, { name: queryName })
     async execute(

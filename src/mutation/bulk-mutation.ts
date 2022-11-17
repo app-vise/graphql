@@ -24,12 +24,24 @@ export class BulkMutationError {
   }
 }
 
+export abstract class BulkMutationBaseResolver {
+  constructor(
+    protected readonly commandBus: CommandBus,
+    protected readonly queryBus: QueryBus
+  ) {}
+
+  abstract executeMutation(
+    input: any,
+    currentIdentity: CurrentIdentity
+  ): Promise<string>;
+}
+
 export function BulkMutation<TEntity, TNode, TQuery, TInput>(
   inputType: Type<TInput>,
   nodeType: new (entity: TEntity) => TNode,
   queryType: new (itemId: string, selectionSet?: SelectionSetObject) => TQuery,
   queryName: string
-): any {
+): typeof BulkMutationBaseResolver {
   const queryNameClass =
     queryName.substring(0, 1).toUpperCase() + queryName.substring(1);
 
@@ -70,11 +82,10 @@ export function BulkMutation<TEntity, TNode, TQuery, TInput>(
   }
 
   @Resolver(() => nodeType, { isAbstract: true })
-  abstract class BulkMutationResolver {
-    protected constructor(
-      protected readonly commandBus: CommandBus,
-      protected readonly queryBus: QueryBus
-    ) {}
+  abstract class BulkMutationResolver extends BulkMutationBaseResolver {
+    constructor(commandBus: CommandBus, queryBus: QueryBus) {
+      super(commandBus, queryBus);
+    }
 
     @Mutation(() => BulkMutationResponse, { name: queryName })
     async execute(
@@ -121,7 +132,7 @@ export function BulkMutation<TEntity, TNode, TQuery, TInput>(
       };
     }
 
-    abstract executeMutation(
+    abstract override executeMutation(
       input: TInput,
       currentIdentity: CurrentIdentity
     ): Promise<string>;
