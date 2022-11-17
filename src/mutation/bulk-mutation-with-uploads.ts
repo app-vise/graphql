@@ -68,8 +68,8 @@ export function BulkMutationWithUploads<TEntity, TNode, TQuery, TInput>(
   @Resolver(() => nodeType, { isAbstract: true })
   abstract class BulkMutationWithUploadsResolver {
     protected constructor(
-      private readonly commandBus: CommandBus,
-      private readonly queryBus: QueryBus
+      protected readonly commandBus: CommandBus,
+      protected readonly queryBus: QueryBus
     ) {}
 
     @Mutation(() => BulkMutationResponse, { name: queryName })
