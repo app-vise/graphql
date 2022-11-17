@@ -10,5 +10,6 @@ export const GetCurrentIdentity = createParamDecorator(
 
 export interface CurrentIdentity {
   id: string;
-  [key: string]: unknown;
+  accountId?: string;
+  [key: string]: any;
 }
