@@ -4,7 +4,7 @@ import { FilterType, SearchRequest, SortField } from '@appvise/domain';
 
 @ArgsType()
 export abstract class SearchRequestArgs implements SearchRequest {
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true, defaultValue: 30 })
   @Min(1)
   @Max(1000)
   first = 30;
