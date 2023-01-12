@@ -1,5 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { Account } from './account.type';
 
 export const GetCurrentIdentity = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
@@ -10,6 +11,6 @@ export const GetCurrentIdentity = createParamDecorator(
 
 export interface CurrentIdentity {
   id: string;
-  accountId?: string;
+  account: Account;
   [key: string]: any;
 }
