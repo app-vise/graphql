@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/app-vise/graphql#readme",
   "dependencies": {
-    "@appvise/domain": "^1.0.10",
+    "@appvise/domain": "^1.1.0",
     "@nestjs/common": "^9.1.1",
     "@nestjs/cqrs": "^9.0.1",
     "@nestjs/graphql": "^10.1.2",
