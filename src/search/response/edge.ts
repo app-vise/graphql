@@ -7,7 +7,7 @@ export interface IEdgeType<TNode> {
   node: TNode;
 }
 
-export function Edge<TEntity, TNode>(
+export function Edge<TEntity, TNode, TEdgeEntity>(
   nodeRef: Type<TNode>
 ): Type<IEdgeType<TNode>> {
   @ObjectType({ isAbstract: true })
@@ -18,9 +18,12 @@ export function Edge<TEntity, TNode>(
     @Field(() => nodeRef)
     node: TNode;
 
-    protected constructor(searchResult: SearchResult<TEntity>, node: TNode) {
-      this.cursor = searchResult.cursor;
-      this.node = node;
+    protected constructor(
+      entity: TEntity,
+      edgeResult: SearchResult<TEdgeEntity>
+    ) {
+      this.cursor = edgeResult.cursor;
+      this.node = new nodeRef(entity);
     }
   }
 

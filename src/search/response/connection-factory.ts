@@ -13,8 +13,8 @@ export class ConnectionFactory {
     response: SearchResponse<TEntity>,
     selectionSet: SelectionSet,
     customEdgeType?: new (
-      searchResult: SearchResult<TEntity>,
-      node: TNode
+      entity: TEntity,
+      searchResult: SearchResult<TEntity>
     ) => TEdge
   ): TConnection {
     const connection = new connectionType();
@@ -27,17 +27,15 @@ export class ConnectionFactory {
 
     if (selectionSet.isSelected('edges')) {
       connection.edges = response.results.map((searchResult) => {
-        const node = new nodeType(searchResult.item);
-
         if (customEdgeType) {
           // Construct custom edge if provided
-          return new customEdgeType(searchResult, node);
+          return new customEdgeType(searchResult.item, searchResult);
         }
 
         // Return default edge otherwise
         return {
           cursor: searchResult.cursor,
-          node,
+          node: new nodeType(searchResult.item),
         } as TEdge;
       });
     }
