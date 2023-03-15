@@ -1,29 +1,30 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { NumericFilter } from '@appvise/domain';
+import { GraphQLBigInt } from 'graphql-scalars';
 
 @InputType('NumericFilter')
 export class NumericFilterInput implements NumericFilter {
-  @Field(() => Int, {
+  @Field(() => GraphQLBigInt, {
     nullable: true,
   })
   equals?: number;
 
-  @Field(() => Int, {
+  @Field(() => GraphQLBigInt, {
     nullable: true,
   })
   lt?: number;
 
-  @Field(() => Int, {
+  @Field(() => GraphQLBigInt, {
     nullable: true,
   })
   lte?: number;
 
-  @Field(() => Int, {
+  @Field(() => GraphQLBigInt, {
     nullable: true,
   })
   gt?: number;
 
-  @Field(() => Int, {
+  @Field(() => GraphQLBigInt, {
     nullable: true,
   })
   gte?: number;
