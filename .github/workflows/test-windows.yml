@@ -29,7 +29,6 @@ jobs:
         os:
           - windows-latest
         node:
-          - 16.x
           - 17.x
 
     steps:
