@@ -30,6 +30,7 @@ jobs:
           - ubuntu-latest
         node:
           - 17.x
+          - 18.x
 
     steps:
       - uses: actions/checkout@v3
